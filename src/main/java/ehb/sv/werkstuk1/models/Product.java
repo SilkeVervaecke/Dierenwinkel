@@ -11,6 +11,6 @@ public class Product {
     private String documentId;
     private String name;
     private String type;
-    private Arrays foranimalslist;
+    private Arrays forAnimalsList;
 
 }
