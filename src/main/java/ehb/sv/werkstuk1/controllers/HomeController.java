@@ -16,4 +16,9 @@ public class HomeController {
     public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
         return "index";
     }
+    @GetMapping("/playing")
+    public String playing(Model model, @AuthenticationPrincipal OidcUser principal) {
+        return "fun";
+    }
+
 }
