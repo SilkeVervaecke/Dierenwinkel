@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Detail Product</title>
+    <link rel="icon" href="/images/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+<div class="flex flex-col h-screen justify-between">
+    <div th:replace="fragments/header :: header" >
+        <nav class="h-10 bg-red-500 text-center">
+            <div>
+                Static Navigation bar
+            </div>
+        </nav>
+    </div>
+
+    <div class="content mb-auto container w-full p-20 m-4 mx-auto my-2 bg-slate-100 border-2 h-96 rounded-xl">
+        <!-- content -->
+        <div class="flex relative">
+            <img alt="gallery" class="absolute inset-0 w-full h-full object-cover object-center opacity-25 "
+                 src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(78).webp">
+            <div class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 ">
+                <h2 th:text="${product.type}" class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">type
+                </h2>
+                <h1 th:text="${product.name}" class="title-font text-lg font-medium text-gray-900 mb-3">name</h1>
+                <p class="leading-relaxed">€<span th:text="${product.price}">price</span></p>
+                <p class="leading-relaxed">(Available: <span th:text="${product.amount}">amount</span>)</p>
+            </div>
+        </div>
+    </div>
+<!--    <form method="post"th:action="@{/cartItem/new}" th:object="${cartItem}">-->
+<!--        <div>-->
+<!--            <span>Buy</span>-->
+<!--            <input th:field="*{procuct}" type="hidden" id="product"  value="${product}">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <span>amount</span>-->
+<!--            <input th:field="*{amount}" type="number" min="1" max="${product.amount}">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <button class="btn">submit</button>-->
+<!--        </div>-->
+
+<!--    </form>-->
+
+    <div th:replace="fragments/footer :: footer" >
+        <div class="h-10 bg-blue-500 text-center">
+            <span >© 2022 Static </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

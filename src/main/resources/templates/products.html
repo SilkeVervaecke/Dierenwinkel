@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>Testing</title>
+    <title>Products</title>
     <link rel="icon" href="../static/images/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -18,31 +18,51 @@
         </nav>
     </div>
 
-    <div class="content mb-auto ">
+    <div class="content mb-auto container w-full pb-20 px-20 pt-10 m-4 mx-auto my-0 bg-slate-100 rounded-xl">
         <!-- content -->
-        <div id="products" th:unless="${all.isEmpty()}">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>name</th>
-                    <th>type</th>
-                    <th>Specialisation</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- for (Student student : StudentenList)
-                ternary operator, vergelijkbaar met een if-else-->
-                <tr th:each="product : ${all}" th:class="${(productStat.odd)?'odd':'even'}">
-                    <td><span th:text="${product.name}"></span></td>
-                    <td><span th:text="${product.type}"></span></td>
-                    <td><span th:text="${student.specialisation}"></span></td>
-<!--                    <td><a class="btn" th:href="@{/details/{id}(id = ${student.id})}">Details</a></td>-->
-                </tr>
-                </tbody>
-            </table>
+        <nav class="font-sans flex flex-col text-center sm:flex-row sm:text-left sm:justify-between py-4 px-6 bg-white shadow sm:items-baseline w-full">
+            <div class="mb-2 sm:mb-0">
+                <h2>For:</h2>
+                <a th:href="@{/products/getForAnimal?animal=cat}" class="text-xl no-underline text-grey-darkest hover:text-blue-dark">Cat</a>
+                <a th:href="@{/products/getForAnimal?animal=dog}" class="text-xl no-underline text-grey-darkest hover:text-blue-dark">Dog</a>
+                <a th:href="@{/products/getForAnimal?animal=rabbit}" class="text-xl no-underline text-grey-darkest hover:text-blue-dark">Rabbit</a>
+            </div>
+            <div>
+                <h2>Type:</h2>
+                <a th:href="@{/products/getType?type=essentials}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">Essentials</a>
+                <a th:href="@{/products/getType?type=food}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">Food</a>
+                <a th:href="@{/products/getType?type=toy}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">Toys</a>
+            </div>
+            <div>
+                <h2>Price:</h2>
+                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2"> €0-€10 </a>
+                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€10-€20 </a>
+                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€20 - ...</a>
+            </div>
+        </nav>
+        <section class="text-gray-600 body-font">
+            <div id="products" th:unless="${products.isEmpty()}" class=" px-5 mx-auto">
+                <div  class="flex flex-wrap -m-4">
+                    <!-- start loop -->
+                    <div th:each="product : ${products}" class="lg:w-1/3 sm:w-1/2 p-4">
+                        <a th:href="@{/products/get(name=${product.name})}">
+                        <div class="flex relative">
+                            <img alt="gallery" class="absolute inset-0 w-full h-full object-cover object-center opacity-25 "
+                                 src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(78).webp">
+                            <div class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 ">
+                                <h2 th:text="${product.type}" class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">type
+                                </h2>
+                                <h1 th:text="${product.name}" class="title-font text-lg font-medium text-gray-900 mb-3">name</h1>
+                                <p class="leading-relaxed">€<span th:text="${product.price}">price</span></p>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <!-- end loop -->
 
-        </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <div th:replace="fragments/footer :: footer" >

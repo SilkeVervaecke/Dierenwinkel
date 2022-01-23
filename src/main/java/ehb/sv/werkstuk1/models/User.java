@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-    private String documentId;
     private String name;
-    private String profession;
-
+    private String nickname;
+    private String email;
+    private Cart cart;
 }
