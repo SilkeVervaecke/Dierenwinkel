@@ -2,6 +2,7 @@ package ehb.sv.werkstuk1.controllers;
 
 import ehb.sv.werkstuk1.dao.UserDAO;
 import ehb.sv.werkstuk1.models.Cart;
+import ehb.sv.werkstuk1.models.Product;
 import ehb.sv.werkstuk1.models.User;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class UserController {
         return "profile";
     }
 
-    @SneakyThrows
     @GetMapping("/cart")
     public String cart(Model model, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
 
@@ -49,6 +49,12 @@ public class UserController {
     @PostMapping("/cart/create")
     public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
         return userDAO.saveCart(cart, email);
+    }
+    @PostMapping("/cart/add")
+    public String createCart(@RequestBody Product product,
+                             @RequestParam String email,
+                             @RequestParam int amount) throws InterruptedException, ExecutionException {
+        return userDAO.AddToCart(email, product, amount);
     }
 
 //    @PostMapping("/user/create")

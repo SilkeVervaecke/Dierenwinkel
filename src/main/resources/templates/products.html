@@ -50,9 +50,9 @@
                             <img alt="gallery" class="absolute inset-0 w-full h-full object-cover object-center opacity-25 "
                                  src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(78).webp">
                             <div class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 ">
-                                <h2 th:text="${product.type}" class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">type
+                                <h2 th:text="${product.type}" class="capitalize tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">type
                                 </h2>
-                                <h1 th:text="${product.name}" class="title-font text-lg font-medium text-gray-900 mb-3">name</h1>
+                                <h1 th:text="${product.name}" class="capitalize title-font text-lg font-medium text-gray-900 mb-3">name</h1>
                                 <p class="leading-relaxed">€<span th:text="${product.price}">price</span></p>
                             </div>
                         </div>

@@ -7,6 +7,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import ehb.sv.werkstuk1.models.Cart;
+import ehb.sv.werkstuk1.models.CartItem;
+import ehb.sv.werkstuk1.models.Product;
 import ehb.sv.werkstuk1.models.User;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +46,14 @@ public class UserDAO {
         }
         return null;
     }
-
+    public String AddToCart(String email, Product product, int amount) throws ExecutionException, InterruptedException {
+        Cart cart = getCart(email);
+        if(cart==null){
+            cart = new Cart();
+        }
+        cart.addItem(new CartItem(product.getName(), product.getPrice(), amount));
+        return saveCart(cart, email);
+    }
 
     public User getUser(String documentId) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();

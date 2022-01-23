@@ -27,3 +27,4 @@ target/classes/application.yml
 target/*
 #src/main/resources/static/css/*
 /target/
+/src/main/resources/application.yml
