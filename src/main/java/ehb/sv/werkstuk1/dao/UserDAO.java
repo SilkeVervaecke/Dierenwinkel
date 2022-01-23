@@ -25,16 +25,9 @@ public class UserDAO {
         return collectionsApiFuture.get().getUpdateTime().toString();
     }
 
-    public String cart(User user) throws ExecutionException, InterruptedException {
+    public String saveCart(Cart cart, String email) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
-        ArrayList<Object> array = new ArrayList<>();
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("amount", 5);
-        docData.put("product", "product9");
-
-        array.add(docData);
-        ApiFuture<WriteResult> collectionsApiFuture = db.collection("carts").document(user.getEmail()).set(user);
+        ApiFuture<WriteResult> collectionsApiFuture = db.collection("carts").document(email).set(cart);
 
         return collectionsApiFuture.get().getUpdateTime().toString();
     }
@@ -44,14 +37,7 @@ public class UserDAO {
         ApiFuture<DocumentSnapshot> future = documentReference.get();
         DocumentSnapshot document = future.get();
         Cart cart;
-        System.out.println("get dem carts");
         if(document.exists()){
-            System.out.println(document);
-            Object obj = document.toObject(Object.class);
-            System.out.println(obj);
-
-            System.out.println(document);
-            System.out.println(document);
             cart = document.toObject(Cart.class);
             System.out.println(cart);
             return cart;

@@ -11,6 +11,11 @@ public class Cart {
     private ArrayList<CartItem> items;
 //    private Timestamp timeCreated;
 
+    public void addItem(CartItem item){
+        if(items.contains(item)){
+            items.forEach();
+        }
+    }
     @Override
     public String toString() {
         return "Cart{" +

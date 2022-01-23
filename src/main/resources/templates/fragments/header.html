@@ -33,7 +33,7 @@
         <!-- Right elements -->
         <div class="flex items-center relative">
             <!-- Icon -->
-            <a class="text-gray-500 hover:text-gray-700 focus:text-gray-700 mr-4" href="#">
+            <a th:href="@{/cart}" class="text-gray-500 hover:text-gray-700 focus:text-gray-700 mr-4" href="#">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="shopping-cart" class="w-4"
                      role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                     <path fill="currentColor"
@@ -47,10 +47,15 @@
                     <a th:href="@{/oauth2/authorization/auth0}"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Log In</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <p>You are logged in!</p>
+<!--                    <p>You are logged in!</p>-->
+                    <span th:if="${profile}">
+                    <img th:src="${profile.get('picture')}" th:attr="alt=${profile.get('name')}" alt="profile"  class="object-scale-down h-10 w-10"/>
+                        </span>
+                    <a th:href="@{/profile}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Profile</a>
+
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log Out</a>
+                    <a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out btn" aria-hidden="true"></span>&nbsp;Log Out</a>
                 </li>
             </ul>
 

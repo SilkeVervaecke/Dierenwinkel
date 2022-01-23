@@ -27,6 +27,11 @@ public class ApiUserController {
     public Cart getCart(@RequestParam String email) throws InterruptedException, ExecutionException {
         return userDAO.getCart(email);
     }
+    @PostMapping("/api/cart/create")
+    public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
+        return userDAO.saveCart(cart, email);
+    }
+
 
     @GetMapping("/api/user/get")
     public User getUser(@RequestParam String documentId) throws InterruptedException, ExecutionException {
