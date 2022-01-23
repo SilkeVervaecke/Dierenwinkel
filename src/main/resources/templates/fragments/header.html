@@ -42,7 +42,7 @@
                 </svg>
             </a>
             <!-- login-->
-            <ul class="nav navbar-nav navbar-right flex">
+            <ul class="nav navbar-nav navbar-right flex" >
                 <li sec:authorize="!isAuthenticated()">
                     <a th:href="@{/oauth2/authorization/auth0}"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Log In</a>
                 </li>
@@ -59,37 +59,5 @@
         <!-- Right elements -->
     </div>
 </nav>
-<!--<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">-->
-<!--    <div class="container">-->
-<!--        <div class="navbar-header">-->
-<!--            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">-->
-<!--                <span class="icon-bar"></span>-->
-<!--                <span class="icon-bar"></span>-->
-<!--                <span class="icon-bar"></span>-->
-<!--            </button>-->
-<!--            <a class="navbar-brand" href="#">Header</a>-->
-<!--        </div>-->
-<!--        <div class="navbar-collapse collapse">-->
-<!--            <ul class="nav navbar-nav">-->
-<!--                <li th:classappend="${module == 'home' ? 'active' : ''}">-->
-<!--                    <a href="#" th:href="@{/}">Home</a>-->
-<!--                </li>-->
-<!--                <li th:classappend="${module == 'products' ? 'active' : ''}">-->
-<!--                    <a href="#" th:href="@{/products}">Products</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--            <ul class="nav navbar-nav navbar-right">-->
-<!--                <li sec:authorize="!isAuthenticated()">-->
-<!--                    <a th:href="@{/oauth2/authorization/auth0}"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Log In</a>-->
-<!--                </li>-->
-<!--                <li sec:authorize="isAuthenticated()">-->
-<!--                    <p>You are logged in!</p>-->
-<!--                    <a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Log Out</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 </body>
 </html>
