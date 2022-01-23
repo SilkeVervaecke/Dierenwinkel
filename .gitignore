@@ -23,3 +23,5 @@
 hs_err_pid*
 target/classes/application.yml
 /src/main/resources/serviceAccountKey.json
+target/*
+src/main/resources/static/css/*
