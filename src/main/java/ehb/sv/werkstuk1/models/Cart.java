@@ -33,6 +33,19 @@ public class Cart {
         }
     }
 
+    public boolean deleteItem(String item){
+        if(items.isEmpty()){
+            return false;
+        }
+        CartItem toDel=new CartItem();
+        for (CartItem arrayItem : items) {
+            if (Objects.equals(arrayItem.getProduct(), item)) {
+                toDel = arrayItem;
+            }
+        }
+        return items.remove(toDel);
+    }
+
     /**
      * calculate the total cost of the cart
      * @return (float) total cost

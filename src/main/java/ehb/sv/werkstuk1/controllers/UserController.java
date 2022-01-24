@@ -42,33 +42,55 @@ public class UserController {
             modelMap.addAttribute("orderPost", orderPost);
             return "cart";
         }
-        return "products";
+        modelMap.addAttribute("message", "You have to be logged in to see your cart");
+        return "index";
     }
-//    not needed I think
+
+    @GetMapping("/cart/delete")
+    public String cartdeleteItem(@RequestParam String item, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
+
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+            Cart cart = userDAO.getCart(principal.getEmail());
+            cart.deleteItem(item);
+            userDAO.saveCart(cart, principal.getEmail());
+            modelMap.addAttribute("cart", cart);
+            String message = item+" has been deleted";
+            modelMap.addAttribute("message", message);
+
+            return "cart";
+        }
+        modelMap.addAttribute("message", "You have to be logged in to see your cart");
+        return "index";
+    }
+
+    //    not needed I think
     @PostMapping("/cart/create")
     public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
         return userDAO.saveCart(cart, email);
     }
+
     @PostMapping("/cart/add")
     public String addToCart(@ModelAttribute CartPost cartPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
 
-        System.out.println("UserController.addToCart");
-        System.out.println("cartPost = " + cartPost);
-        Cart cart = userDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
-        modelMap.addAttribute("cart", cart);
-        OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
-        modelMap.addAttribute("orderPost", orderPost);
+            System.out.println("UserController.addToCart");
+            System.out.println("cartPost = " + cartPost);
+            Cart cart = userDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
+            modelMap.addAttribute("cart", cart);
+            OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
+            modelMap.addAttribute("orderPost", orderPost);
         }
         return "cart";
     }
 
     /**
-     *  when clicking on order now button on cart page
-     *  will redirect to check out page where personal details have to be filled in
+     * when clicking on order now button on cart page
+     * will redirect to check out page where personal details have to be filled in
+     *
      * @param orderPost (=email + total cost)
-     * @param modelMap :)
+     * @param modelMap  :)
      * @param principal :)
      * @return checkout page
      */
@@ -85,14 +107,15 @@ public class UserController {
     /**
      * order word opgebouwd en naar de db verstuurd
      * de cart word erna leeggehaalt
+     *
      * @param userDetails all details of the user
-     * @param modelMap :)
-     * @param principal :)
+     * @param modelMap    :)
+     * @param principal   :)
      * @return confirmation page
      */
     @PostMapping("/confirm")
     public String confirm(@ModelAttribute UserDetails userDetails, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
-        if (principal != null && userDetails !=null) {
+        if (principal != null && userDetails != null) {
             modelMap.addAttribute("profile", principal.getClaims());
             Order order = new Order();
             order.setUserDetails(userDetails);
@@ -101,8 +124,11 @@ public class UserController {
             order.setCart(cart);
             order.setPrice(cart.calculateTotal());
             String id = userDAO.saveOrder(order);
-            if(!id.isEmpty()){
+            if (!id.isEmpty()) {
                 userDAO.deleteCart(principal.getEmail());
+            } else {
+                modelMap.addAttribute("message", "Something went wrong, try again");
+                return "index";
             }
             modelMap.addAttribute("id", id);
         }

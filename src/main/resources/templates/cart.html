@@ -6,6 +6,8 @@
     <title>Cart</title>
     <link rel="icon" href="../static/images/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/message.css" >
+
 </head>
 
 <body>
@@ -27,6 +29,7 @@
                     <th class="capitalize px-6 py-4 text-xl">Product</th>
                     <th class="capitalize px-6 py-4 text-xl">amount</th>
                     <th class="capitalize px-6 py-4 text-xl">price</th>
+                    <th class="capitalize px-6 py-4 text-l text-red-700 ">delete?</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -35,6 +38,9 @@
                         <td class="px-6 py-4 text-lg"> -</td>
                         <td class="px-6 py-4 text-lg"> -</td>
                         <td class="px-6 py-4 text-lg">€ -</td>
+                        <td class="whitespace-nowrap text-center ">
+                            <button type="submit" class="rounded py-1 px-2 bg-red-300">delete</button>
+                        </td>
                     </tr>
                     <tr th:each="item : ${cart.items}">
                         <td class="capitalize px-6 py-4 text-lg">
@@ -44,12 +50,19 @@
                         </td>
                         <td th:text="${item.amount}" class="capitalize px-6 py-4 text-lg">-</td>
                         <td class="capitalize px-6 py-4 text-lg">€<span th:text="${item.price}"> -</span></td>
+                        <td class="text-center">
+                            <form th:method="delete" th:action="@{/cart/delete(name=${item.product})}">
+                                <button type="submit" class="rounded py-1 px-2 bg-red-300">delete</button>
+                            </form>
+                        </td>
                     </tr>
                     <tr>
                         <td class="capitalize px-6 py-4 text-lg"> total:</td>
                         <td></td>
                         <td class="capitalize px-6 py-4 text-lg">€<span th:text="${cart.calculateTotal()}"> -</span>
                         </td>
+                        <td></td>
+
                     </tr>
                 </div>
                 </tbody>
