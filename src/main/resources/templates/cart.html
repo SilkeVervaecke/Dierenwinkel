@@ -51,7 +51,7 @@
                         <td th:text="${item.amount}" class="capitalize px-6 py-4 text-lg">-</td>
                         <td class="capitalize px-6 py-4 text-lg">€<span th:text="${item.price}"> -</span></td>
                         <td class="text-center">
-                            <form th:method="delete" th:action="@{/cart/delete(name=${item.product})}">
+                            <form th:method="post" th:action="@{/cart/delete/{item}(item=${item.product})}">
                                 <button type="submit" class="rounded py-1 px-2 bg-red-300">delete</button>
                             </form>
                         </td>

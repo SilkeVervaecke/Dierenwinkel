@@ -1,6 +1,6 @@
 package ehb.sv.werkstuk1.controllers;
 
-import ehb.sv.werkstuk1.dao.UserDAO;
+import ehb.sv.werkstuk1.dao.CartDAO;
 import ehb.sv.werkstuk1.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.ExecutionException;
 
 @Controller
-public class UserController {
+public class CartController {
 
-    public UserDAO userDAO;
+    public CartDAO cartDAO;
 
     @Autowired
-    public UserController(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public CartController(CartDAO cartDAO) {
+        this.cartDAO = cartDAO;
     }
 
     @GetMapping("/profile")
@@ -35,7 +35,7 @@ public class UserController {
 
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
-            Cart cart = userDAO.getCart(principal.getEmail());
+            Cart cart = cartDAO.getCart(principal.getEmail());
             modelMap.addAttribute("cart", cart);
 
             OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
@@ -46,17 +46,27 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/cart/delete")
-    public String cartdeleteItem(@RequestParam String item, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
+    /**
+     *
+     * @param item the name of the item to delete
+     * @param modelMap :)
+     * @param principal :)
+     * @return cart page if logged in, index if not logged in
+     */
+    @PostMapping("/cart/delete/{item}")
+    public String cartDeleteItem(@PathVariable(value = "item")String item, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
 
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
-            Cart cart = userDAO.getCart(principal.getEmail());
+            Cart cart = cartDAO.getCart(principal.getEmail());
             cart.deleteItem(item);
-            userDAO.saveCart(cart, principal.getEmail());
+            cartDAO.saveCart(cart, principal.getEmail());
             modelMap.addAttribute("cart", cart);
             String message = item+" has been deleted";
             modelMap.addAttribute("message", message);
+
+            OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
+            modelMap.addAttribute("orderPost", orderPost);
 
             return "cart";
         }
@@ -64,20 +74,15 @@ public class UserController {
         return "index";
     }
 
-    //    not needed I think
-    @PostMapping("/cart/create")
-    public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
-        return userDAO.saveCart(cart, email);
-    }
 
     @PostMapping("/cart/add")
     public String addToCart(@ModelAttribute CartPost cartPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
 
-            System.out.println("UserController.addToCart");
+            System.out.println("CartController.addToCart");
             System.out.println("cartPost = " + cartPost);
-            Cart cart = userDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
+            Cart cart = cartDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
             modelMap.addAttribute("cart", cart);
             OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
             modelMap.addAttribute("orderPost", orderPost);
@@ -95,7 +100,7 @@ public class UserController {
      * @return checkout page
      */
     @PostMapping("/checkout")
-    public String checkout(@ModelAttribute OrderPost orderPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
+    public String checkout(@ModelAttribute OrderPost orderPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
             modelMap.addAttribute("orderPost", orderPost);
@@ -120,12 +125,12 @@ public class UserController {
             Order order = new Order();
             order.setUserDetails(userDetails);
             order.setEmail(principal.getEmail());
-            Cart cart = userDAO.getCart(principal.getEmail());
+            Cart cart = cartDAO.getCart(principal.getEmail());
             order.setCart(cart);
             order.setPrice(cart.calculateTotal());
-            String id = userDAO.saveOrder(order);
+            String id = cartDAO.saveOrder(order);
             if (!id.isEmpty()) {
-                userDAO.deleteCart(principal.getEmail());
+                cartDAO.deleteCart(principal.getEmail());
             } else {
                 modelMap.addAttribute("message", "Something went wrong, try again");
                 return "index";
@@ -135,6 +140,14 @@ public class UserController {
         return "confirmation";
     }
 
+
+    //    not needed I think
+//    @PostMapping("/cart/create")
+//    public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
+//        return cartDAO.saveCart(cart, email);
+//    }
+// -----------------------------------------------------------------------------------------------------------//
+//    USER IS NOT USED ANYMORE
 //    @PostMapping("/user/create")
 //    public String createUser(@RequestBody User user) throws InterruptedException, ExecutionException {
 //        return userDAO.createUser(user);
