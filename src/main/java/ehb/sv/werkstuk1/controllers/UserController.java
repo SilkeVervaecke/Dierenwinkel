@@ -1,15 +1,12 @@
 package ehb.sv.werkstuk1.controllers;
 
 import ehb.sv.werkstuk1.dao.UserDAO;
-import ehb.sv.werkstuk1.models.Cart;
-import ehb.sv.werkstuk1.models.Product;
-import ehb.sv.werkstuk1.models.User;
-import lombok.SneakyThrows;
+import ehb.sv.werkstuk1.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ExecutionException;
@@ -25,38 +22,55 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
+    public String home(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) {
         if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
+            modelMap.addAttribute("profile", principal.getClaims());
             System.out.println(principal.getClaims());
         }
         return "profile";
     }
 
     @GetMapping("/cart")
-    public String cart(Model model, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
+    public String cart(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
 
         if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
-            System.out.println(principal.getClaims());
+            modelMap.addAttribute("profile", principal.getClaims());
             Cart cart = userDAO.getCart(principal.getEmail());
-            model.addAttribute("cart", cart);
+            modelMap.addAttribute("cart", cart);
+
+            OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
+            modelMap.addAttribute("orderPost", orderPost);
             return "cart";
         }
         return "index";
     }
-
+//    not needed I think
     @PostMapping("/cart/create")
     public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
         return userDAO.saveCart(cart, email);
     }
     @PostMapping("/cart/add")
-    public String createCart(@RequestBody Product product,
-                             @RequestParam String email,
-                             @RequestParam int amount) throws InterruptedException, ExecutionException {
-        return userDAO.AddToCart(email, product, amount);
-    }
+    public String addToCart(@ModelAttribute CartPost cartPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
 
+        System.out.println("UserController.addToCart");
+        System.out.println("cartPost = " + cartPost);
+        Cart cart = userDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
+        modelMap.addAttribute("cart", cart);
+        OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
+        modelMap.addAttribute("orderPost", orderPost);
+        }
+        return "cart";
+    }
+    @PostMapping("/checkout")
+    public String checkout(@ModelAttribute OrderPost orderPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+            modelMap.addAttribute("orderPost", orderPost);
+        }
+        return "checkout";
+    }
 //    @PostMapping("/user/create")
 //    public String createUser(@RequestBody User user) throws InterruptedException, ExecutionException {
 //        return userDAO.createUser(user);

@@ -10,7 +10,7 @@
 
 <body>
 <div class="flex flex-col h-screen justify-between">
-    <div th:replace="fragments/header :: header" >
+    <div th:replace="fragments/header :: header">
         <nav class="h-10 bg-red-500 text-center">
             <div>
                 Static Navigation bar
@@ -23,45 +23,54 @@
             <form class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
                 <p class="text-gray-800 font-medium">Customer information</p>
                 <div class="">
-                    <label class="block text-sm text-gray-00" for="cus_name">Name</label>
-                    <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="cus_name" name="name" type="text" required="" placeholder="Your Name" aria-label="Name">
+                    <label class="block text-sm text-gray-00" for="name">Name</label>
+                    <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded" id="name" name="name" type="text"
+                           required="" placeholder="Your Name" aria-label="Name">
                 </div>
                 <div class="mt-2">
-                    <label class="block text-sm text-gray-600" for="cus_email">Email</label>
-                    <input class="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded" id="cus_email" name="email" type="text" required="" placeholder="Your Email" aria-label="Email">
+                    <label class="block text-sm text-gray-600" for="email">Email</label>
+                    <input th:value="${orderPost.email}" class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="email" name="email"
+                           type="text" th:placeholder="${orderPost.email}" aria-label="Email" readonly>
                 </div>
                 <div class="mt-2">
-                    <label class=" block text-sm text-gray-600" for="cus_email">Address</label>
-                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"  name="address" type="text" required="" placeholder="Street" aria-label="Email">
+                    <label class=" block text-sm text-gray-600" for="address">Address</label>
+                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="address" name="address"
+                           type="text" required="" placeholder="Street" aria-label="Email">
                 </div>
                 <div class="mt-2">
-                    <label class="hidden text-sm block text-gray-600" for="cus_email">City</label>
-                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"  name="city" type="text" required="" placeholder="City" aria-label="City">
+                    <label class="hidden text-sm block text-gray-600" for="city">City</label>
+                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="city" name="city" type="text"
+                           required="" placeholder="City" aria-label="City">
                 </div>
                 <div class="inline-block mt-2 w-1/2 pr-1">
-                    <label class="hidden block text-sm text-gray-600" for="cus_email">Country</label>
-                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"  name="country" type="text" required="" placeholder="Country" aria-label="Country">
+                    <label class="hidden block text-sm text-gray-600" for="country">Country</label>
+                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="country" name="country"
+                           type="text" required="" placeholder="Country" aria-label="Country">
                 </div>
                 <div class="inline-block mt-2 -mx-1 pl-1 w-1/2">
-                    <label class="hidden block text-sm text-gray-600" for="cus_email">Zip</label>
-                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"   name="zipCode" type="text" required="" placeholder="Zipcode" aria-label="ZipCode">
+                    <label class="hidden block text-sm text-gray-600" for="zipCode">Zip</label>
+                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="zipCode" name="zipCode"
+                           type="text" required="" placeholder="Zipcode" aria-label="ZipCode">
                 </div>
                 <p class="mt-4 text-gray-800 font-medium">Payment information</p>
                 <div class="">
-                    <label class="block text-sm text-gray-600" for="cus_name">Card</label>
-                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded"  name="Card" type="text" required="" placeholder="Card Number MM/YY CVC" aria-label="Name">
+                    <label class="block text-sm text-gray-600" for="cards">Card</label>
+                    <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" id="cards" name="Card" type="text"
+                           required="" placeholder="Card Number MM/YY CVC" aria-label="Name">
                 </div>
                 <div class="mt-4">
-                    <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">$3.00</button>
+                    <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit"
+                            th:text="${orderPost.price}">€-
+                    </button>
                 </div>
             </form>
         </div>
         <!-- content -->
     </div>
 
-    <div th:replace="fragments/footer :: footer" >
+    <div th:replace="fragments/footer :: footer">
         <div class="h-10 bg-blue-500 text-center">
-            <span >© 2022 Static </span>
+            <span>© 2022 Static </span>
         </div>
     </div>
 </div>

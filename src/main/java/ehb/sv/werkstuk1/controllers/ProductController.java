@@ -1,6 +1,7 @@
 package ehb.sv.werkstuk1.controllers;
 
 import ehb.sv.werkstuk1.dao.ProductDAO;
+import ehb.sv.werkstuk1.models.CartPost;
 import ehb.sv.werkstuk1.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,25 +27,40 @@ public class ProductController {
     @GetMapping("/products")
     public String home(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
         modelMap.addAttribute("products", productDAO.getAllProducts());
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+        }
         return "products";
     }
 
     @GetMapping("/products/getForAnimal")
-    public String getForAnimal(@RequestParam String animal, ModelMap modelMap) throws ExecutionException, InterruptedException {
+    public String getForAnimal(@RequestParam String animal, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
         modelMap.addAttribute("products", productDAO.getAllProductsforAnimal(animal));
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+        }
         return "products";
     }
     @GetMapping("/products/getType")
-    public String getType(ModelMap modelMap, @RequestParam String type) throws ExecutionException, InterruptedException {
+    public String getType(ModelMap modelMap, @RequestParam String type, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
         modelMap.addAttribute("products", productDAO.getAllProductsfortype(type));
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+        }
         return "products";
     }
 
     @GetMapping("/products/get")
     public String getProduct(ModelMap modelMap, @RequestParam String name, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
-        modelMap.addAttribute("product", productDAO.getProduct(name));
+        Product product = productDAO.getProduct(name);
+        modelMap.addAttribute("product", product);
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
+            CartPost cartPost = new CartPost();
+            cartPost.setEmail(principal.getEmail());
+            cartPost.setName(product.getName());
+            cartPost.setPrice(product.getPrice());
+            modelMap.addAttribute("cartPost", cartPost);
         }
         return "productDetail";
     }

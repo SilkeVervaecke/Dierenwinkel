@@ -12,6 +12,11 @@ import java.util.Objects;
 public class Cart {
     private ArrayList<CartItem> items;
 
+    /**
+     * safely add an item to the array of items
+     * if the item is already in the array then the amount will be increased
+     * @param item item to add to the Array of items
+     */
     public void addItem(CartItem item) {
         if(items==null){
             items = new ArrayList<>();
@@ -28,8 +33,26 @@ public class Cart {
         }
     }
 
+    /**
+     * calculate the total cost of the cart
+     * @return (float) total cost
+     */
+    public float calculateTotal(){
+        float total = 0;
+        for (CartItem item : items) {
+            total = total + (item.getAmount()* item.getPrice());
+        }
+        return total;
+    }
+
+    public boolean canCheckout(){
+        return !items.isEmpty();
+    }
+
+//    --------------------------------------------- //
+
     public Cart() {
-        items = new ArrayList<CartItem>();
+        items = new ArrayList<>();
     }
 
     public Cart(ArrayList<CartItem> items) {
@@ -40,7 +63,6 @@ public class Cart {
     public String toString() {
         return "Cart{" +
                 "items=" + items +
-//                ", timeCreated=" + timeCreated +
                 '}';
     }
 }

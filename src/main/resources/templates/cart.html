@@ -10,7 +10,7 @@
 
 <body>
 <div class="flex flex-col h-screen justify-between">
-    <div th:replace="fragments/header :: header" >
+    <div th:replace="fragments/header :: header">
         <nav class="h-10 bg-red-500 text-center">
             <div>
                 Static Navigation bar
@@ -18,40 +18,62 @@
         </nav>
     </div>
 
-    <div class="content mb-auto ">
+    <div class="flex items-center justify-center h-screen content mb-auto container w-full p-20 mx-auto bg-slate-100 border-2 rounded-xl">
         <!-- content -->
-        <table class="table-auto">
-            <thead>
-            <tr>
-                <th>Song</th>
-                <th>Artist</th>
-                <th>Year</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                <td>Malcolm Lockyer</td>
-                <td>1961</td>
-            </tr>
-            <tr>
-                <td>Witchy Woman</td>
-                <td>The Eagles</td>
-                <td>1972</td>
-            </tr>
-            <tr>
-                <td>Shining Star</td>
-                <td>Earth, Wind, and Fire</td>
-                <td>1975</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="m-10 p-10 border border-indigo-200 bg-indigo-50 shadow py-10 ">
+            <table class="table-auto px-8 py-10">
+                <thead class="bg-blue-100 p-20 py-10">
+                <tr>
+                    <th class="capitalize px-6 py-4 text-xl">Product</th>
+                    <th class="capitalize px-6 py-4 text-xl">amount</th>
+                    <th class="capitalize px-6 py-4 text-xl">price</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white">
+                <div id="cartItems" th:unless="${cart==null}" class=" px-5 mx-auto">
+                    <tr th:if="${cart==null}">
+                        <td class="px-6 py-4 text-lg"> -</td>
+                        <td class="px-6 py-4 text-lg"> -</td>
+                        <td class="px-6 py-4 text-lg">€ -</td>
+                    </tr>
+                    <tr th:each="item : ${cart.items}">
+                        <td class="capitalize px-6 py-4 text-lg">
+                            <a th:href="@{/products/get(name=${item.product})}">
+                                <span th:text="${item.product}"> - </span>
+                            </a>
+                        </td>
+                        <td th:text="${item.amount}" class="capitalize px-6 py-4 text-lg">-</td>
+                        <td class="capitalize px-6 py-4 text-lg">€<span th:text="${item.price}"> -</span></td>
+                    </tr>
+                    <tr>
+                        <td class="capitalize px-6 py-4 text-lg"> total:</td>
+                        <td></td>
+                        <td class="capitalize px-6 py-4 text-lg">€<span th:text="${cart.calculateTotal()}"> -</span>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
 
+            <div th:if="${profile}" class=" mt-5 h-full float-right object-bottom inset-x-0 bottom-0">
+                <form method="post" th:action="@{/checkout}" th:object="${orderPost}">
+                    <div>
+                        <input th:field="*{price}" type="hidden" id="name" th:value="${cart.calculateTotal()}">
+                        <input th:field="*{email}" type="hidden" id="email" th:value="${profile.get('email')}">
+                    </div>
+                    <div>
+                        <button class="tracking-widest bg-blue-400 rounded py-1 px-4 mx-4 uppercase font-semibold ">
+                            Checkout
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div th:replace="fragments/footer :: footer" >
+    <div th:replace="fragments/footer :: footer">
         <div class="h-10 bg-blue-500 text-center">
-            <span >© 2022 Static </span>
+            <span>© 2022 Static </span>
         </div>
     </div>
 </div>

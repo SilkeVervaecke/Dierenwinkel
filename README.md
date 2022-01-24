@@ -6,7 +6,7 @@ Application Framework - Werkstuk
   - edit product
   - create product
   - view cart
-  - something after you order?
+  - something after you orderPost?
 - make cart (alike product probably)
 
 # Done

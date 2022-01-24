@@ -20,13 +20,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserDAO {
 
-    public String createUser(User user) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> collectionsApiFuture = db.collection("users").document(user.getEmail()).set(user);
-
-        return collectionsApiFuture.get().getUpdateTime().toString();
-    }
-
     public String saveCart(Cart cart, String email) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
         ApiFuture<WriteResult> collectionsApiFuture = db.collection("carts").document(email).set(cart);
@@ -44,15 +37,35 @@ public class UserDAO {
             System.out.println(cart);
             return cart;
         }
-        return null;
+        return new Cart();
     }
-    public String AddToCart(String email, Product product, int amount) throws ExecutionException, InterruptedException {
+
+    /**
+     *  add item to cart in the DB
+     * @param email the email of the logged-in user (who puts the item in their cart)
+     * @param name the name of the product
+     * @param price the price of the product
+     * @param amount amount of the product
+     * @return the updated cart
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    public Cart AddToCart(String email, String name, float  price, int amount) throws ExecutionException, InterruptedException {
         Cart cart = getCart(email);
         if(cart==null){
             cart = new Cart();
         }
-        cart.addItem(new CartItem(product.getName(), product.getPrice(), amount));
-        return saveCart(cart, email);
+        cart.addItem(new CartItem(name, price, amount));
+        saveCart(cart, email);
+        return cart;
+    }
+//    --------------------------------------------------------------------
+
+    public String createUser(User user) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> collectionsApiFuture = db.collection("users").document(user.getEmail()).set(user);
+
+        return collectionsApiFuture.get().getUpdateTime().toString();
     }
 
     public User getUser(String documentId) throws ExecutionException, InterruptedException {

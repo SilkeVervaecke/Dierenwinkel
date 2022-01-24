@@ -14,7 +14,9 @@ public class Product {
     private float amount; //just to be sure
     private float price;
 
-    @Override
+
+    //    --------------------------------------------- //
+   @Override
     public String toString() {
         return "Product{" +
                 ", name='" + name + '\'' +
