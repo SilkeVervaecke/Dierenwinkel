@@ -1,14 +1,11 @@
 # Dierenwinkel
 Application Framework - Werkstuk
-
+##### By Silke Vervaecke
 # To Do 
 - make views
-  - edit product
+- edit product
   - create product
-  - view cart
-  - something after you orderPost?
-- make cart (alike product probably)
-
+  - see past orders on profile
 # Done
 - db side of products
 - login/logout/registration
@@ -16,6 +13,11 @@ Application Framework - Werkstuk
   - show products
   - show specific product
   - detail product
+  - view cart
+  - something after you orderPost?
+- make cart 
+- make order
+
 - (Show User Profile Information) https://manage.auth0.com/dashboard/us/dev-o6ofwtae/applications/2SR1bFkgvJ6UDLAUXVHIeKkxwdzjbdxA/quickstart/java-spring-boot
 
 # Things we use
@@ -24,7 +26,7 @@ Application Framework - Werkstuk
 
 # Might do (maybe)
 - implement roles
-- 
+
 # Nope
 - https://manage.auth0.com/dashboard/us/dev-o6ofwtae/hooks 
 
