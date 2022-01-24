@@ -41,7 +41,7 @@
             </div>
         </nav>
         <section class="text-gray-600 body-font">
-            <div id="products" th:unless="${products.isEmpty()}" class=" px-5 mx-auto">
+            <div id="products" th:unless="${products==null||products.isEmpty()}" class=" px-5 mx-auto">
                 <div  class="flex flex-wrap -m-4">
                     <!-- start loop -->
                     <div th:each="product : ${products}" class="lg:w-1/3 sm:w-1/2 p-4">

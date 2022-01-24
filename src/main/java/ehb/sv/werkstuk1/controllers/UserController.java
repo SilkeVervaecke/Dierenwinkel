@@ -42,7 +42,7 @@ public class UserController {
             modelMap.addAttribute("orderPost", orderPost);
             return "cart";
         }
-        return "index";
+        return "products";
     }
 //    not needed I think
     @PostMapping("/cart/create")
@@ -63,14 +63,52 @@ public class UserController {
         }
         return "cart";
     }
+
+    /**
+     *  when clicking on order now button on cart page
+     *  will redirect to check out page where personal details have to be filled in
+     * @param orderPost (=email + total cost)
+     * @param modelMap :)
+     * @param principal :)
+     * @return checkout page
+     */
     @PostMapping("/checkout")
     public String checkout(@ModelAttribute OrderPost orderPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
             modelMap.addAttribute("orderPost", orderPost);
         }
+        modelMap.addAttribute("userDetails", new UserDetails());
         return "checkout";
     }
+
+    /**
+     * order word opgebouwd en naar de db verstuurd
+     * de cart word erna leeggehaalt
+     * @param userDetails all details of the user
+     * @param modelMap :)
+     * @param principal :)
+     * @return confirmation page
+     */
+    @PostMapping("/confirm")
+    public String confirm(@ModelAttribute UserDetails userDetails, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
+        if (principal != null && userDetails !=null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+            Order order = new Order();
+            order.setUserDetails(userDetails);
+            order.setEmail(principal.getEmail());
+            Cart cart = userDAO.getCart(principal.getEmail());
+            order.setCart(cart);
+            order.setPrice(cart.calculateTotal());
+            String id = userDAO.saveOrder(order);
+            if(!id.isEmpty()){
+                userDAO.deleteCart(principal.getEmail());
+            }
+            modelMap.addAttribute("id", id);
+        }
+        return "confirmation";
+    }
+
 //    @PostMapping("/user/create")
 //    public String createUser(@RequestBody User user) throws InterruptedException, ExecutionException {
 //        return userDAO.createUser(user);

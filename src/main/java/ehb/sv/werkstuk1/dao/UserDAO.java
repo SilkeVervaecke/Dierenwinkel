@@ -1,19 +1,16 @@
 package ehb.sv.werkstuk1.dao;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import ehb.sv.werkstuk1.models.Cart;
-import ehb.sv.werkstuk1.models.CartItem;
-import ehb.sv.werkstuk1.models.Product;
-import ehb.sv.werkstuk1.models.User;
+import ehb.sv.werkstuk1.models.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -47,8 +44,8 @@ public class UserDAO {
      * @param price the price of the product
      * @param amount amount of the product
      * @return the updated cart
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * @throws ExecutionException :)
+     * @throws InterruptedException :)
      */
     public Cart AddToCart(String email, String name, float  price, int amount) throws ExecutionException, InterruptedException {
         Cart cart = getCart(email);
@@ -59,6 +56,40 @@ public class UserDAO {
         saveCart(cart, email);
         return cart;
     }
+
+    public String deleteCart(String email){
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> writeResult = db.collection("carts").document(email).delete();
+
+        return "Successfully deleted cart of "+ email;
+    }
+
+    public String saveOrder(Order order) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String time = dtf.format(now);
+        ApiFuture<WriteResult> collectionsApiFuture = db.collection("orders").document(time).set(order);
+
+        return time;
+    }
+
+    public ArrayList<Order> getOrders(String email) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        ApiFuture<QuerySnapshot> future = db.collection("products").whereEqualTo("email", email).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        ArrayList<Order> orders = new ArrayList<>();
+
+        for (DocumentSnapshot document : documents) {
+            Order order;
+            order = document.toObject(Order.class);
+            orders.add(order);
+            System.out.println(document.getId() + " => " + document.toObject(Order.class));
+        }
+        return orders;
+    }
+
 //    --------------------------------------------------------------------
 
     public String createUser(User user) throws ExecutionException, InterruptedException {

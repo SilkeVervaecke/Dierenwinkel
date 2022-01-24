@@ -55,14 +55,14 @@
                 </tbody>
             </table>
 
-            <div th:if="${profile}" class=" mt-5 h-full float-right object-bottom inset-x-0 bottom-0">
-                <form method="post" th:action="@{/checkout}" th:object="${orderPost}">
+            <div  th:if="${profile}"  class=" mt-5 h-full float-right object-bottom inset-x-0 bottom-0">
+                <form method="post" th:action="@{/checkout}" th:object="${orderPost}" th:unless="${cart==null}">
                     <div>
                         <input th:field="*{price}" type="hidden" id="name" th:value="${cart.calculateTotal()}">
                         <input th:field="*{email}" type="hidden" id="email" th:value="${profile.get('email')}">
                     </div>
                     <div>
-                        <button class="tracking-widest bg-blue-400 rounded py-1 px-4 mx-4 uppercase font-semibold ">
+                        <button  class="tracking-widest bg-blue-400 rounded py-1 px-4 mx-4 uppercase font-semibold ">
                             Checkout
                         </button>
                     </div>
