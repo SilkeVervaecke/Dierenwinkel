@@ -33,19 +33,6 @@ public class ProductDAO {
         return null;
     }
 
-    // [DEPRECATED]
-    public Product getProductbyName(String name) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> future = db.collection("products").whereEqualTo("name", name).get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        Product product;
-        if(!documents.isEmpty()){
-            product = documents.get(0).toObject(Product.class);
-            return product;
-        }
-        return null;
-    }
-
     public ArrayList<Product> getAllProducts() throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 

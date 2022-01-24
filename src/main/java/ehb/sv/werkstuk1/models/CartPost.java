@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CartPost {
-//    entity so postrequest can happen to put somthing into your cart
+//    entity so postrequest can happen to put something into your cart
     private String name;
     private float price;
     private String email;

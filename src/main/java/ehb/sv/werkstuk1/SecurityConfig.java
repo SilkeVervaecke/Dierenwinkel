@@ -22,7 +22,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .addLogoutHandler(logoutHandler);
-//        http.csrf().disable();
-        // TODO: delete http.csrf().disable()
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,28 +71,6 @@ public class ProductController {
             modelMap.addAttribute("cartPost", cartPost);
         }
         return "productDetail";
-    }
-
-// ------------------------------------------------------------------------------------------------------------------------------------- //
-
-    @PostMapping("/product/create")
-    public String createProduct(@RequestBody Product product) throws InterruptedException, ExecutionException {
-        return productDAO.createProduct(product);
-    }
-
-    @GetMapping("/product/getAll")
-    public ArrayList<Product> getAllProduct() throws InterruptedException, ExecutionException {
-        return productDAO.getAllProducts();
-    }
-
-    @PutMapping("/product/update")
-    public String updateProduct(@RequestBody Product product) throws ExecutionException, InterruptedException {
-        return productDAO.updateProduct(product);
-    }
-
-    @DeleteMapping("/product/delete")
-    public String deleteProduct(@RequestParam String name){
-        return productDAO.deleteProduct(name);
     }
 
 }

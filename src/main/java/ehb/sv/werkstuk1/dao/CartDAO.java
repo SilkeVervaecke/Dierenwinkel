@@ -87,36 +87,5 @@ public class CartDAO {
         return orders;
     }
 
-//    --------------------------------------------------------------------
 
-//    public String createUser(User user) throws ExecutionException, InterruptedException {
-//        Firestore db = FirestoreClient.getFirestore();
-//        ApiFuture<WriteResult> collectionsApiFuture = db.collection("users").document(user.getEmail()).set(user);
-//
-//        return collectionsApiFuture.get().getUpdateTime().toString();
-//    }
-
-//    public User getUser(String documentId) throws ExecutionException, InterruptedException {
-//        Firestore db = FirestoreClient.getFirestore();
-//        DocumentReference documentReference = db.collection("users").document(documentId);
-//        ApiFuture<DocumentSnapshot> future = documentReference.get();
-//        DocumentSnapshot document = future.get();
-//        User user;
-//        if(document.exists()){
-//            user = document.toObject(User.class);
-//            return user;
-//        }
-//        return null;
-//    }
-//    public String updateUser(User user) throws ExecutionException, InterruptedException {
-//        Firestore db = FirestoreClient.getFirestore();
-//        ApiFuture<WriteResult> collectionsApiFuture = db.collection("users").document(user.getEmail()).set(user);
-//        return collectionsApiFuture.get().getUpdateTime().toString();
-//    }
-//    public String deleteUser(String documentId){
-//        Firestore db = FirestoreClient.getFirestore();
-//        ApiFuture<WriteResult> writeResult = db.collection("users").document(documentId).delete();
-//
-//        return "Successfully deleted "+ documentId;
-//    }
 }

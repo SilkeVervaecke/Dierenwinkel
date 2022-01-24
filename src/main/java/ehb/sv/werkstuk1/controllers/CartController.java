@@ -16,11 +16,8 @@ import java.util.concurrent.ExecutionException;
 @Controller
 public class CartController {
 
-
-    @Autowired
-    public ProductDAO productDAO;
-
     public CartDAO cartDAO;
+    public ProductDAO productDAO;
     @Autowired
     public CartController(CartDAO cartDAO, ProductDAO productDAO) {
         this.cartDAO = cartDAO;
@@ -72,7 +69,7 @@ public class CartController {
             cart.deleteItem(item);
             cartDAO.saveCart(cart, principal.getEmail());
             modelMap.addAttribute("cart", cart);
-            String message = item+" has been deleted";
+            String message = item+" has been deleted from your cart";
             modelMap.addAttribute("message", message);
 
             OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
@@ -154,32 +151,5 @@ public class CartController {
             productDAO.orderProduct(prod, item.getAmount());
         }
     }
-
-    //    not needed I think
-//    @PostMapping("/cart/create")
-//    public String createCart(@RequestBody Cart cart, @RequestParam String email) throws InterruptedException, ExecutionException {
-//        return cartDAO.saveCart(cart, email);
-//    }
-// -----------------------------------------------------------------------------------------------------------//
-//    USER IS NOT USED ANYMORE
-//    @PostMapping("/user/create")
-//    public String createUser(@RequestBody User user) throws InterruptedException, ExecutionException {
-//        return userDAO.createUser(user);
-//    }
-//
-//    @GetMapping("/user/get")
-//    public User getUser(@RequestParam String documentId) throws InterruptedException, ExecutionException {
-//        return userDAO.getUser(documentId);
-//    }
-//
-//    @PutMapping("/user/update")
-//    public String updateUser(@RequestBody User user) throws ExecutionException, InterruptedException {
-//        return userDAO.updateUser(user);
-//    }
-//
-//    @DeleteMapping("/user/delete")
-//    public String deleteUser(@RequestParam String documentId){
-//        return userDAO.deleteUser(documentId);
-//    }
 
 }
