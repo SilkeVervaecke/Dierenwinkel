@@ -49,6 +49,15 @@ public class ProductController {
         }
         return "products";
     }
+    @GetMapping("/products/getPrice")
+    public String getPrice(ModelMap modelMap, @RequestParam int min,@RequestParam int max, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
+
+        modelMap.addAttribute("products", productDAO.getAllProductsBetweenPrice(min, max));
+        if (principal != null) {
+            modelMap.addAttribute("profile", principal.getClaims());
+        }
+        return "products";
+    }
 
     @GetMapping("/products/get")
     public String getProduct(ModelMap modelMap, @RequestParam String name, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {

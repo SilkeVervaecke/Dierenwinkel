@@ -57,7 +57,6 @@ public class ProductDAO {
             Product product;
             product = document.toObject(Product.class);
             products.add(product);
-//            System.out.println(document.getId() + " => " + document.toObject(Product.class));
         }
         return products;
     }
@@ -72,7 +71,6 @@ public class ProductDAO {
             Product product;
             product = document.toObject(Product.class);
             products.add(product);
-//            System.out.println(document.getId() + " => " + document.toObject(Product.class));
         }
         return products;
     }
@@ -87,7 +85,25 @@ public class ProductDAO {
             Product product;
             product = document.toObject(Product.class);
             products.add(product);
-            System.out.println(document.getId() + " => " + document.toObject(Product.class));
+        }
+        return products;
+    }
+    public ArrayList<Product> getAllProductsBetweenPrice(int min, int max) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future;
+        if(max==0){
+             future = db.collection("products").whereGreaterThanOrEqualTo("price", min).get();
+
+        } else{
+             future = db.collection("products").whereLessThanOrEqualTo("price", max).whereGreaterThanOrEqualTo("price", min).get();
+        }
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        ArrayList<Product> products = new ArrayList<>();
+
+        for (DocumentSnapshot document : documents) {
+            Product product;
+            product = document.toObject(Product.class);
+            products.add(product);
         }
         return products;
     }

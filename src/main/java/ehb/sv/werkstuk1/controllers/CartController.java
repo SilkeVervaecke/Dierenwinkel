@@ -1,6 +1,7 @@
 package ehb.sv.werkstuk1.controllers;
 
 import ehb.sv.werkstuk1.dao.CartDAO;
+import ehb.sv.werkstuk1.dao.ProductDAO;
 import ehb.sv.werkstuk1.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,23 +10,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 @Controller
 public class CartController {
 
-    public CartDAO cartDAO;
 
     @Autowired
-    public CartController(CartDAO cartDAO) {
+    public ProductDAO productDAO;
+
+    public CartDAO cartDAO;
+    @Autowired
+    public CartController(CartDAO cartDAO, ProductDAO productDAO) {
         this.cartDAO = cartDAO;
+        this.productDAO = productDAO;
     }
 
+
     @GetMapping("/profile")
-    public String home(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) {
+    public String profile(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws ExecutionException, InterruptedException {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
-            System.out.println(principal.getClaims());
+            System.out.println("CartController.profile");
+            ArrayList<Order> orders = cartDAO.getOrders(principal.getEmail());
+            modelMap.addAttribute("orders", orders);
         }
         return "profile";
     }
@@ -47,7 +56,8 @@ public class CartController {
     }
 
     /**
-     *
+     * cart word opgehaald van de db, het item word gedelete
+     * daarna word de geupdate cart terug in de db gezet
      * @param item the name of the item to delete
      * @param modelMap :)
      * @param principal :)
@@ -79,9 +89,6 @@ public class CartController {
     public String addToCart(@ModelAttribute CartPost cartPost, ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) throws InterruptedException, ExecutionException {
         if (principal != null) {
             modelMap.addAttribute("profile", principal.getClaims());
-
-            System.out.println("CartController.addToCart");
-            System.out.println("cartPost = " + cartPost);
             Cart cart = cartDAO.AddToCart(cartPost.getEmail(), cartPost.getName(), cartPost.getPrice(), cartPost.getAmount());
             modelMap.addAttribute("cart", cart);
             OrderPost orderPost = new OrderPost(principal.getEmail(), cart.calculateTotal());
@@ -112,7 +119,7 @@ public class CartController {
     /**
      * order word opgebouwd en naar de db verstuurd
      * de cart word erna leeggehaalt
-     *
+     * de georderde items worden ook verwijderd uit de stock (amount bij product)
      * @param userDetails all details of the user
      * @param modelMap    :)
      * @param principal   :)
@@ -128,6 +135,7 @@ public class CartController {
             Cart cart = cartDAO.getCart(principal.getEmail());
             order.setCart(cart);
             order.setPrice(cart.calculateTotal());
+            deleteFromStock(cart);
             String id = cartDAO.saveOrder(order);
             if (!id.isEmpty()) {
                 cartDAO.deleteCart(principal.getEmail());
@@ -140,6 +148,12 @@ public class CartController {
         return "confirmation";
     }
 
+    private void deleteFromStock(Cart cart) throws ExecutionException, InterruptedException {
+        for(CartItem item : cart.getItems()){
+            Product prod = productDAO.getProduct(item.getProduct());
+            productDAO.orderProduct(prod, item.getAmount());
+        }
+    }
 
     //    not needed I think
 //    @PostMapping("/cart/create")

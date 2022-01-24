@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Testing</title>
-    <link rel="icon" href="../static/images/favicon.ico">
+    <link rel="icon" href="css/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/message.css" >
+    <link rel="stylesheet" href="css/message.css">
 
 </head>
 
@@ -21,14 +21,55 @@
         </nav>
     </div>
 
-    <div class="content mb-auto container w-full p-20 m-4 mx-auto my-2 bg-slate-100 border-2 h-96 rounded-xl">
-        <div sec:authorize="isAuthenticated()">
-            <img th:src="${profile.get('picture')}" th:attr="alt=${profile.get('name')}"/>
-            <h2 th:text="${profile.get('name')}"></h2>
-            <p th:text="${profile.get('email')}"></p>
-            <a th:href="@{/logout}">Log Out</a>
+    <div class="content mb-auto container w-full h-full px-40 p-10 m-4 mx-auto my-0 bg-slate-100 border-2 rounded-xl grid grid-cols-2">
+        <div class="justify-self-center p-5">
+
+            <h2 class="pb-5 pt-1 px-10 text-2xl font-bold tracking-wider">Profile</h2>
+
+            <div sec:authorize="isAuthenticated()" class="p-10 py-5">
+                <img th:src="${profile.get('picture')}" th:attr="alt=${profile.get('name')}"/>
+                <h2 class=" px-5 py-2 text-base">Name:  <span th:text="${profile.get('name')}">name</span></h2>
+                <h3 class="my-2 px-5 py-2 pb-8 text-base">Email: <span th:text="${profile.get('email')}">email</span></h3>
+                <a class=" mx-5 px-4 py-1 text-base bg-rose-400 rounded" th:href="@{/logout}">Log Out</a>
+            </div>
         </div>
-<!--       <p>One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. "What's happened to me?" he thought. It wasn't a dream. His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame. It showed a lady fitted out with a fur hat and fur boa who sat upright, raising a heavy fur muff that covered the whole of her lower arm towards the viewer. Gregor then turned to look out the window at the dull weather. Drops </p>-->
+
+        <div class="justify-self-center p-5">
+            <h2 class="py-1 px-4 mx-4 text-2xl font-bold tracking-wider">Past Orders</h2>
+            <div th:each="order : ${orders}" class="">
+                <table class="table-auto px-8 py-8 ">
+                    <thead class="bg-fuchsia-200 p-10 py-5">
+                    <tr>
+                        <th class="capitalize px-5 py-2 text-base">Product</th>
+                        <th class="capitalize px-5 py-2 text-base">amount</th>
+                        <th class="capitalize px-5 py-2 text-base">price</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                    <div id="cartItems" th:unless="${order.cart==null}" class=" px-5 mx-auto">
+                        <tr th:if="${order.cart==null}">
+                            <td class="px-6 py-2 text-sm"> -</td>
+                            <td class="px-6 py-2 text-sm"> -</td>
+                            <td class="px-6 py-2 text-sm">€-</td>
+
+                        </tr>
+                        <tr th:each="item : ${order.cart.items}">
+                            <td class="capitalize px-6 py-2 text-sm">
+                                <a th:href="@{/products/get(name=${item.product})}">
+                                    <span th:text="${item.product}"> - </span>
+                                </a>
+                            </td>
+                            <td th:text="${item.amount}" class="capitalize px-6 py-2 text-sm">-</td>
+                            <td class="capitalize px-6 py-2 text-sm">€<span th:text="${item.price}"> -</span></td>
+                        </tr>
+
+                    </div>
+                    </tbody>
+
+                </table>
+                <div class="mb-5 capitalize px-5 text-base">Total: €<span th:text="${order.price}">25</span></div>
+            </div>
+        </div>
     </div>
 
     <div th:replace="fragments/footer :: footer">

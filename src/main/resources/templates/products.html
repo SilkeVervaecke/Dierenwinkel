@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Products</title>
-    <link rel="icon" href="../static/images/favicon.ico">
+    <link rel="icon" href="css/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/message.css" >
 
@@ -37,9 +37,9 @@
             </div>
             <div>
                 <h2>Price:</h2>
-                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2"> €0-€10 </a>
-                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€10-€20 </a>
-                <a href="/" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€20 - ...</a>
+                <a th:href="@{/products/getPrice?min=0&max=10}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2"> €0-€10 </a>
+                <a th:href="@{/products/getPrice?min=10&max=20}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€10-€20 </a>
+                <a th:href="@{/products/getPrice?min=20&max=0}" class="text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2">€20 - ...</a>
             </div>
         </nav>
         <section class="text-gray-600 body-font">

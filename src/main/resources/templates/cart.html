@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Cart</title>
-    <link rel="icon" href="../static/images/favicon.ico">
+    <link rel="icon" href="css/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/message.css" >
 
@@ -69,7 +69,7 @@
             </table>
 
             <div  th:if="${profile}"  class=" mt-5 h-full float-right object-bottom inset-x-0 bottom-0">
-                <form method="post" th:action="@{/checkout}" th:object="${orderPost}" th:unless="${cart==null}">
+                <form method="post" th:action="@{/checkout}" th:object="${orderPost}" th:unless="${cart.items.isEmpty()}">
                     <div>
                         <input th:field="*{price}" type="hidden" id="name" th:value="${cart.calculateTotal()}">
                         <input th:field="*{email}" type="hidden" id="email" th:value="${profile.get('email')}">
@@ -80,6 +80,7 @@
                         </button>
                     </div>
                 </form>
+                <span th:if="${cart.items.isEmpty()}" class="capitalize px-6 py-4 text-lg"> It's empty here, add something to your cart</span>
             </div>
         </div>
     </div>

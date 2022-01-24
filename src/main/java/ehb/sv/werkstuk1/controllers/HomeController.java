@@ -20,12 +20,6 @@ public class HomeController {
         }
         return "index";
     }
-    @GetMapping("/playing")
-    public String playing(ModelMap modelMap, @AuthenticationPrincipal OidcUser principal) {
-        if (principal != null) {
-            modelMap.addAttribute("profile", principal.getClaims());
-        }
-        return "fun";
-    }
+
 
 }

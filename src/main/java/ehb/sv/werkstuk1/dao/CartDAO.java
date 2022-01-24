@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -64,7 +62,7 @@ public class CartDAO {
         return "Successfully deleted cart of "+ email;
     }
 
-    public String saveOrder(Order order) throws ExecutionException, InterruptedException {
+    public String saveOrder(Order order) {
         Firestore db = FirestoreClient.getFirestore();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
         LocalDateTime now = LocalDateTime.now();
@@ -77,7 +75,7 @@ public class CartDAO {
     public ArrayList<Order> getOrders(String email) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
-        ApiFuture<QuerySnapshot> future = db.collection("products").whereEqualTo("email", email).get();
+        ApiFuture<QuerySnapshot> future = db.collection("orders").whereEqualTo("email", email).get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         ArrayList<Order> orders = new ArrayList<>();
 
@@ -85,7 +83,6 @@ public class CartDAO {
             Order order;
             order = document.toObject(Order.class);
             orders.add(order);
-            System.out.println(document.getId() + " => " + document.toObject(Order.class));
         }
         return orders;
     }

@@ -23,7 +23,7 @@
                 </li>
                 <li class="nav-item p-2">
                     <a class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0"
-                       href="/playing">Testing</a>
+                       href="/profile">profile</a>
                 </li>
                 <li class="nav-item p-2">
                     <a class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0"
@@ -49,7 +49,7 @@
             <ul class="nav navbar-nav navbar-right flex">
                 <li sec:authorize="!isAuthenticated()">
                     <a th:href="@{/oauth2/authorization/auth0}">
-                        <button class="bg-blue-400 rounded py-1 px-3 mx-4">
+                        <button class="bg-blue-400 rounded py-1 px-3 mx-4 text-white">
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true">
 
                             </span>&nbsp;Log In
@@ -68,7 +68,7 @@
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/logout}">
-                        <button class="bg-red-400 rounded py-1 px-2 mx-4">
+                        <button class="bg-red-600 rounded py-1 px-2 mx-4 text-white">
                             <span class="glyphicon glyphicon-log-out btn" aria-hidden="true">
 
                             </span>&nbsp;Log Out
